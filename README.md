@@ -1,36 +1,38 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Squish UI
 
-## Getting Started
+`squish-ui` is a component documentation repository for **web (React)** and **mobile (React Native)** UI patterns.
 
-First, run the development server:
+The project focuses on:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Reusable, copy-paste friendly component implementations
+- Side-by-side platform documentation (web and mobile)
+- Story-based previews and embedded test results in docs pages
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Platform model
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Web components** live under `components/web/*` and are styled with **Tailwind CSS v4**.
+- **Mobile components** live under `components/mobile/*` and are styled with **React Native StyleSheet**.
+- Documentation routes are split by platform:
+  - `/docs/components/web/[slug]`
+  - `/docs/components/mobile/[slug]`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Architecture
 
-## Learn More
+This repository follows an atomic UI structure for docs rendering:
 
-To learn more about Next.js, take a look at the following resources:
+- `ui/atoms`
+- `ui/molecules`
+- `ui/organisms`
+- `ui/templates`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Docs navigation is centralised in `app/docs/navigation.ts` and shared between desktop and mobile navigation UIs.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Testing model
 
-## Deploy on Vercel
+- Web component tests use **Vitest**
+- Mobile component tests use **Jest**
+- Build-time test results are embedded into docs pages from:
+  - `test-results.json`
+  - `test-results-mobile.json`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+In production, docs show embedded build results rather than executing tests at runtime.

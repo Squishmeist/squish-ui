@@ -12,6 +12,8 @@
 
 # testing
 /coverage
+/test-results.json
+/test-results-mobile.json
 
 # next.js
 /.next/
