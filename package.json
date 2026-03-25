@@ -11,6 +11,7 @@
     "dev": "turbo run dev --filter=@squishui/docs",
     "build": "turbo run build",
     "start": "turbo run start --filter=@squishui/docs",
+    "clean": "git clean -xdf node_modules",
     "lint": "turbo run lint",
     "test": "turbo run test --filter=@squishui/web",
     "test:mobile": "turbo run test --filter=@squishui/mobile"
