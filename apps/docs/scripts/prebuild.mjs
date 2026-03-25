@@ -7,6 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const docsRoot = path.resolve(__dirname, "..");
 const monorepoRoot = path.resolve(docsRoot, "..", "..");
+const mobileRoot = path.resolve(monorepoRoot, "packages", "mobile");
 
 function run(cmd, args) {
   const res = spawnSync(cmd, args, {
@@ -26,7 +27,10 @@ function ensureJson(file) {
 }
 
 const vitestBin = path.join(monorepoRoot, "node_modules", ".bin", "vitest");
-const jestBin = path.join(monorepoRoot, "node_modules", ".bin", "jest");
+const pnpmBin =
+  process.platform === "win32"
+    ? path.join(monorepoRoot, "node_modules", ".bin", "pnpm.cmd")
+    : "pnpm";
 
 const vitestExit = run(vitestBin, [
   "run",
@@ -38,12 +42,17 @@ if (vitestExit !== 0) {
   console.warn("Vitest failed during prebuild; continuing with fallback JSON.");
 }
 
-const jestExit = run(jestBin, [
+const jestExit = run(pnpmBin, [
+  "--dir",
+  mobileRoot,
+  "exec",
+  "jest",
   "--passWithNoTests",
   "--runInBand",
   "--ci",
   "--json",
-  "--outputFile=test-results-mobile.json",
+  "--outputFile",
+  path.join(docsRoot, "test-results-mobile.json"),
 ]);
 
 if (jestExit !== 0) {

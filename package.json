@@ -13,7 +13,7 @@
     "start": "turbo run start --filter=@squishui/docs",
     "lint": "turbo run lint",
     "test": "turbo run test",
-    "test:mobile": "turbo run test:mobile --filter=@squishui/docs"
+    "test:mobile": "turbo run test --filter=@squishui/mobile"
   },
   "devDependencies": {
     "turbo": "^2.1.3"

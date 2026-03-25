@@ -13,16 +13,17 @@ export async function GET(request: Request) {
   const runner = searchParams.get("runner") === "jest" ? "jest" : "vitest";
 
   const cwd = process.cwd();
-  const executable = path.join(cwd, "..", "..", "node_modules", ".bin", runner);
-  const args =
+  const monorepoRoot = path.join(cwd, "..", "..");
+  const executable =
     runner === "jest"
-      ? ["--verbose", "--runInBand"]
-      : ["run", "--reporter=verbose"];
+      ? path.join(monorepoRoot, "node_modules", ".bin", "pnpm")
+      : path.join(monorepoRoot, "node_modules", ".bin", "vitest");
+  const args = runner === "jest" ? ["--dir", path.join(monorepoRoot, "packages", "mobile"), "exec", "jest", "--verbose", "--runInBand"] : ["run", "--reporter=verbose"];
 
   if (slug && /^[a-z0-9-]+$/.test(slug)) {
     args.push(
       runner === "jest"
-        ? `../../packages/mobile/${slug}/${slug}.test.tsx`
+        ? `${slug}/${slug}.test.tsx`
         : `../../packages/web/${slug}/${slug}.test.tsx`,
     );
   }
