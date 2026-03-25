@@ -14,17 +14,38 @@ export async function GET(request: Request) {
 
   const cwd = process.cwd();
   const monorepoRoot = path.join(cwd, "..", "..");
+  const pnpmExecutable =
+    process.platform === "win32"
+      ? path.join(monorepoRoot, "node_modules", ".bin", "pnpm.cmd")
+      : "pnpm";
   const executable =
+    runner === "jest" ? pnpmExecutable : pnpmExecutable;
+  const args =
     runner === "jest"
-      ? path.join(monorepoRoot, "node_modules", ".bin", "pnpm")
-      : path.join(monorepoRoot, "node_modules", ".bin", "vitest");
-  const args = runner === "jest" ? ["--dir", path.join(monorepoRoot, "packages", "mobile"), "exec", "jest", "--verbose", "--runInBand"] : ["run", "--reporter=verbose"];
+      ? [
+          "--dir",
+          path.join(monorepoRoot, "packages", "mobile"),
+          "exec",
+          "jest",
+          "--verbose",
+          "--runInBand",
+        ]
+      : [
+          "--dir",
+          path.join(monorepoRoot, "packages", "web"),
+          "exec",
+          "vitest",
+          "run",
+          "--config",
+          "./vitest.config.ts",
+          "--reporter=verbose",
+        ];
 
   if (slug && /^[a-z0-9-]+$/.test(slug)) {
     args.push(
       runner === "jest"
         ? `${slug}/${slug}.test.tsx`
-        : `../../packages/web/${slug}/${slug}.test.tsx`,
+        : `${slug}/${slug}.test.tsx`,
     );
   }
 

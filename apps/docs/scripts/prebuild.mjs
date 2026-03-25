@@ -8,6 +8,7 @@ const __dirname = path.dirname(__filename);
 const docsRoot = path.resolve(__dirname, "..");
 const monorepoRoot = path.resolve(docsRoot, "..", "..");
 const mobileRoot = path.resolve(monorepoRoot, "packages", "mobile");
+const webRoot = path.resolve(monorepoRoot, "packages", "web");
 
 function run(cmd, args) {
   const res = spawnSync(cmd, args, {
@@ -26,16 +27,22 @@ function ensureJson(file) {
   }
 }
 
-const vitestBin = path.join(monorepoRoot, "node_modules", ".bin", "vitest");
 const pnpmBin =
   process.platform === "win32"
     ? path.join(monorepoRoot, "node_modules", ".bin", "pnpm.cmd")
     : "pnpm";
 
-const vitestExit = run(vitestBin, [
+const vitestExit = run(pnpmBin, [
+  "--dir",
+  webRoot,
+  "exec",
+  "vitest",
   "run",
+  "--config",
+  "./vitest.config.ts",
   "--reporter=json",
-  "--outputFile=test-results.json",
+  "--outputFile",
+  path.join(docsRoot, "test-results.json"),
 ]);
 
 if (vitestExit !== 0) {

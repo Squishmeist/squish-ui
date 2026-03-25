@@ -1,5 +1,14 @@
 {
   "name": "@squishui/web",
   "version": "0.1.0",
-  "private": true
+  "private": true,
+  "scripts": {
+    "test": "vitest run --config ./vitest.config.ts",
+    "test:watch": "vitest --config ./vitest.config.ts"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.9.1",
+    "jsdom": "^29.0.1",
+    "vitest": "^4.1.1"
+  }
 }
