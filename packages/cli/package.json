@@ -1,0 +1,17 @@
+{
+  "name": "squishui",
+  "version": "0.1.0",
+  "private": false,
+  "type": "module",
+  "bin": {
+    "squishui": "./index.mjs"
+  },
+  "files": [
+    "index.mjs"
+  ],
+  "scripts": {
+    "build": "node -e \"console.log('cli: no build step')\"",
+    "lint": "node -e \"console.log('cli: no lint step')\"",
+    "test": "node -e \"console.log('cli: no tests yet')\""
+  }
+}

@@ -1,7 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
+node_modules
 /.pnp
 .pnp.*
 .yarn/*
@@ -12,12 +12,14 @@
 
 # testing
 /coverage
-/test-results.json
-/test-results-mobile.json
 
 # next.js
 /.next/
+/apps/docs/.next/
 /out/
+
+# turbo
+.turbo
 
 # production
 /build
@@ -25,6 +27,8 @@
 # misc
 .DS_Store
 *.pem
+test-results.json
+test-results-mobile.json
 
 # debug
 npm-debug.log*
