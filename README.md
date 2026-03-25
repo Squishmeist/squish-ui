@@ -16,8 +16,8 @@ apps/
 
 packages/
   cli/          # published squishui CLI
-  web/          # web component templates/source
-  mobile/       # mobile component templates/source
+  web/          # web components
+  mobile/       # mobile components
 ```
 
 ## Platform model
@@ -57,7 +57,7 @@ This repository publishes a CLI that can copy component files into another proje
 npx squishui@latest add button
 ```
 
-By default, it copies:
+By default, it copies from the published CLI package’s bundled web components into your current project:
 
 - `ui/button/button.tsx`
 - `ui/button/button.test.tsx`
@@ -72,6 +72,33 @@ Optional flags:
 
 - `--storybook` (or `-s`) include `button.stories.tsx`
 - `--force` (or `-f`) overwrite existing files
+
+### Local CLI smoke test
+
+From this repository, you can test the command without publishing:
+
+```bash
+mkdir -p /tmp/squishui-test && cd /tmp/squishui-test
+node /Users/ainsley/Documents/squish-ui/packages/cli/index.mjs add button
+ls -la ui/button
+```
+
+Expected files:
+
+- `ui/button/button.tsx`
+- `ui/button/button.test.tsx`
+
+### Publish checklist
+
+```bash
+cd /Users/ainsley/Documents/squish-ui/packages/cli
+npm whoami
+npm pack --dry-run
+npm version patch --workspaces=false
+npm publish --access public --workspaces=false
+```
+
+Use `--workspaces=false` so npm publishes only the CLI package instead of traversing the monorepo workspace graph.
 
 ## Monorepo scripts
 

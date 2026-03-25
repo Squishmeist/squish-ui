@@ -1,15 +1,18 @@
 {
   "name": "squishui",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": false,
   "type": "module",
   "bin": {
     "squishui": "./index.mjs"
   },
   "files": [
-    "index.mjs"
+    "index.mjs",
+    "web"
   ],
   "scripts": {
+    "prepack": "node ./scripts/sync-web-components.mjs",
+    "postpack": "node ./scripts/clean-web-components.mjs",
     "build": "node -e \"console.log('cli: no build step')\"",
     "lint": "node -e \"console.log('cli: no lint step')\"",
     "test": "node -e \"console.log('cli: no tests yet')\""

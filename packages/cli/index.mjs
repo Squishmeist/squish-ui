@@ -7,7 +7,7 @@ import { fileURLToPath } from "node:url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const webPackageDir = path.resolve(__dirname, "..", "web");
+const webPackageDir = path.resolve(__dirname, "web");
 
 function printHelp() {
   console.log(`squishui
