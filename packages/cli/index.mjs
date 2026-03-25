@@ -7,7 +7,7 @@ import { fileURLToPath } from "node:url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const webTemplatesDir = path.join(__dirname, "templates", "web");
+const webPackageDir = path.resolve(__dirname, "..", "web");
 
 function printHelp() {
   console.log(`squishui
@@ -51,9 +51,9 @@ if (!/^[a-z0-9-]+$/.test(component)) {
 const withStorybook = args.includes("--storybook") || args.includes("-s");
 const force = args.includes("--force") || args.includes("-f");
 
-const sourceDir = path.join(webTemplatesDir, component);
+const sourceDir = path.join(webPackageDir, component);
 if (!existsSync(sourceDir)) {
-  fail(`Component "${component}" was not found in web templates.`);
+  fail(`Component "${component}" was not found in web components.`);
 }
 
 const destinationDir = path.join(process.cwd(), "ui", component);
@@ -69,7 +69,7 @@ for (const file of filesToCopy) {
   const destination = path.join(destinationDir, file);
 
   if (!existsSync(source)) {
-    fail(`Template file is missing: ${file}`);
+    fail(`Component file is missing: ${file}`);
   }
 
   if (existsSync(destination) && !force) {

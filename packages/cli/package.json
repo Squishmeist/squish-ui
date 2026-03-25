@@ -7,8 +7,7 @@
     "squishui": "./index.mjs"
   },
   "files": [
-    "index.mjs",
-    "templates/web"
+    "index.mjs"
   ],
   "scripts": {
     "build": "node -e \"console.log('cli: no build step')\"",

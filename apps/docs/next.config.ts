@@ -1,11 +1,13 @@
 import type { NextConfig } from "next";
 import path from "path";
 
+const workspaceRoot = path.resolve(process.cwd(), "../..");
+
 const nextConfig: NextConfig = {
-  outputFileTracingRoot: path.join(__dirname, "../.."),
+  outputFileTracingRoot: workspaceRoot,
   transpilePackages: ["@squishui/web", "@squishui/mobile"],
   turbopack: {
-    root: path.join(__dirname, "../.."),
+    root: workspaceRoot,
     resolveAlias: {
       "react-native": "react-native-web",
     },
