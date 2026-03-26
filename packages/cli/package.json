@@ -15,6 +15,6 @@
     "postpack": "node ./scripts/clean-web-components.mjs",
     "build": "node -e \"console.log('cli: no build step')\"",
     "lint": "node -e \"console.log('cli: no lint step')\"",
-    "test": "node -e \"console.log('cli: no tests yet')\""
+    "test": "node --test index.test.mjs"
   }
 }

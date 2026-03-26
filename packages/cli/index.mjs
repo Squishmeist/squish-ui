@@ -2,12 +2,10 @@
 
 import { copyFileSync, existsSync, mkdirSync } from "node:fs";
 import path from "node:path";
-import process from "node:process";
 import { fileURLToPath } from "node:url";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const webPackageDir = path.resolve(__dirname, "web");
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const webDir = process.env.SQUISHUI_WEB_DIR ?? path.resolve(__dirname, "web");
 
 function printHelp() {
   console.log(`squishui
@@ -48,35 +46,36 @@ if (!/^[a-z0-9-]+$/.test(component)) {
   fail("Component name must use lowercase letters, numbers, or hyphens.");
 }
 
-const withStorybook = args.includes("--storybook") || args.includes("-s");
-const force = args.includes("--force") || args.includes("-f");
-
-const sourceDir = path.join(webPackageDir, component);
+const sourceDir = path.join(webDir, component);
 if (!existsSync(sourceDir)) {
   fail(`Component "${component}" was not found in web components.`);
 }
 
-const destinationDir = path.join(process.cwd(), "ui", component);
-mkdirSync(destinationDir, { recursive: true });
+const withStorybook = args.includes("--storybook") || args.includes("-s");
+const force = args.includes("--force") || args.includes("-f");
 
 const filesToCopy = [`${component}.tsx`, `${component}.test.tsx`];
-if (withStorybook) {
-  filesToCopy.push(`${component}.stories.tsx`);
-}
+if (withStorybook) filesToCopy.push(`${component}.stories.tsx`);
+
+const destinationDir = path.join(process.cwd(), "ui", component);
 
 for (const file of filesToCopy) {
   const source = path.join(sourceDir, file);
   const destination = path.join(destinationDir, file);
+  if (!existsSync(source)) fail(`Component file is missing: ${file}`);
+  if (existsSync(destination) && !force) fail(`File already exists: ${destination}. Use --force to overwrite.`);
+}
 
-  if (!existsSync(source)) {
-    fail(`Component file is missing: ${file}`);
+mkdirSync(destinationDir, { recursive: true });
+
+for (const file of filesToCopy) {
+  const source = path.join(sourceDir, file);
+  const destination = path.join(destinationDir, file);
+  try {
+    copyFileSync(source, destination);
+  } catch (err) {
+    fail(`Failed to copy ${file}: ${err.message}`);
   }
-
-  if (existsSync(destination) && !force) {
-    fail(`File already exists: ${destination}. Use --force to overwrite.`);
-  }
-
-  copyFileSync(source, destination);
   console.log(`✓ Copied ${path.join("ui", component, file)}`);
 }
 
