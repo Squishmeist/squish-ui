@@ -1,6 +1,6 @@
-import { Button } from "@squishui/web/button/button";
-import * as Stories from "@squishui/web/button/button.stories";
 import { ComponentDoc } from "@/ui/templates/component-doc";
+import { Button } from "@squishui/web/button";
+import * as Stories from "@squishui/web/button/button.stories";
 
 export const metadata = { title: "Button – Squish UI" };
 
@@ -30,6 +30,7 @@ export default function ButtonPage() {
     <ComponentDoc
       name="Button"
       slug="button"
+      type="web"
       description={description}
       previews={previews}
     />

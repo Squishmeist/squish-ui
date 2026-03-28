@@ -18,7 +18,7 @@
     },
     "test": {
       "dependsOn": ["^test"],
-      "outputs": ["test-results*.json"]
+      "outputs": ["test-results-web.json"]
     },
     "test:mobile": {
       "dependsOn": ["^test:mobile"],

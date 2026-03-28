@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@squishui/mobile/button/button";
+import { Button } from "@squishui/mobile/button";
 import * as Stories from "@squishui/mobile/button/button.stories";
 import { useMobileTheme } from "@squishui/mobile/use-mobile-theme";
 

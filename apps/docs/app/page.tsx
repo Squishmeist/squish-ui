@@ -1,4 +1,4 @@
-import { Button } from "@squishui/web/button/button";
+import { Button } from "@squishui/web/button";
 import { ThemeToggle } from "@/ui/atoms/theme-toggle";
 import Link from "next/link";
 import {

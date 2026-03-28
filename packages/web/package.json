@@ -2,6 +2,12 @@
   "name": "@squishui/web",
   "version": "0.1.0",
   "private": true,
+  "exports": {
+    "./button": "./src/button/button.tsx",
+    "./button/button.stories": "./src/button/button.stories.tsx",
+    "./input": "./src/input/input.tsx",
+    "./input/input.stories": "./src/input/input.stories.tsx"
+  },
   "scripts": {
     "test": "vitest run --config ./vitest.config.ts",
     "test:watch": "vitest --config ./vitest.config.ts"

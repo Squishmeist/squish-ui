@@ -42,7 +42,7 @@ const vitestExit = run(pnpmBin, [
   "./vitest.config.ts",
   "--reporter=json",
   "--outputFile",
-  path.join(docsRoot, "test-results.json"),
+  path.join(docsRoot, "test-results-web.json"),
 ]);
 
 if (vitestExit !== 0) {
@@ -66,5 +66,5 @@ if (jestExit !== 0) {
   console.warn("Jest failed during prebuild; continuing with fallback JSON.");
 }
 
-ensureJson("test-results.json");
+ensureJson("test-results-web.json");
 ensureJson("test-results-mobile.json");

@@ -44,7 +44,7 @@ Docs navigation is centralized in `apps/docs/app/docs/navigation.ts` and shared 
 - Web component tests use **Vitest**
 - Mobile component tests use **Jest**
 - Build-time test results are embedded into docs pages from:
-  - `apps/docs/test-results.json`
+  - `apps/docs/test-results-web.json`
   - `apps/docs/test-results-mobile.json`
 
 In production, docs show embedded build results rather than executing tests at runtime.

@@ -13,7 +13,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const cliRoot = path.resolve(__dirname, "..");
 const repoRoot = path.resolve(cliRoot, "..", "..");
-const sourceDir = path.join(repoRoot, "packages", "web");
+const sourceDir = path.join(repoRoot, "packages", "web", "src");
 const destinationDir = path.join(cliRoot, "web");
 
 if (!existsSync(sourceDir)) {

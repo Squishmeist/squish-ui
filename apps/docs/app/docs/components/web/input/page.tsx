@@ -1,6 +1,6 @@
-import { Input } from "@squishui/web/input/input";
-import * as Stories from "@squishui/web/input/input.stories";
 import { ComponentDoc } from "@/ui/templates/component-doc";
+import { Input } from "@squishui/web/input";
+import * as Stories from "@squishui/web/input/input.stories";
 
 export const metadata = { title: "Input – Squish UI" };
 
@@ -25,6 +25,7 @@ export default function InputPage() {
     <ComponentDoc
       name="Input"
       slug="input"
+      type="web"
       description={description}
       previews={previews}
     />

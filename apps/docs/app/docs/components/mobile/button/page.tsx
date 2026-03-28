@@ -1,9 +1,5 @@
-import { ComponentMobileDoc } from "@/ui/templates/component-mobile-doc";
-import {
-  DefaultPreview,
-  GhostPreview,
-  OutlinePreview,
-} from "./preview";
+import { ComponentDoc } from "@/ui/templates/component-doc";
+import { DefaultPreview, GhostPreview, OutlinePreview } from "./preview";
 
 export const metadata = { title: "Button – Squish UI" };
 
@@ -30,9 +26,10 @@ const description = (
 
 export default function MobileButtonPage() {
   return (
-    <ComponentMobileDoc
+    <ComponentDoc
       name="Button"
       slug="button"
+      type="mobile"
       description={description}
       previews={previews}
     />
