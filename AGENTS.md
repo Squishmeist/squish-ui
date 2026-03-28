@@ -50,39 +50,79 @@ export const navigation: NavSection[] = [
 ];
 ```
 
+## Package Structure
+
+Component packages use a `src/` directory for clean exports:
+
+```
+packages/web/
+  src/
+    button/
+      button.tsx        # Component
+      button.stories.tsx # Stories
+      button.test.tsx   # Tests
+    input/
+      ...
+  package.json  # exports: { "./button": "./src/button/button.tsx", ... }
+
+packages/mobile/
+  src/
+    button/
+      ...
+```
+
+**Clean imports** are configured via `"exports"` field in package.json:
+```typescript
+// Import cleanly without src/ or file extensions
+import { Button } from "@squishui/web/button";
+import * as Stories from "@squishui/web/button";
+import { Button as MobileButton } from "@squishui/mobile/button";
+```
+
 ## Platform Support
 
 **Web Components** (React + Tailwind CSS v4)
 
-- Location: `components/web/[slug]/`
+- Location: `packages/web/src/[slug]/`
 - Testing: Vitest + Testing Library
 - Stories: Component Story Format (CSF)
-- Route: `/docs/components/[slug]`
+- Route: `/docs/components/web/[slug]`
+- Documentation: `apps/docs/app/docs/components/web/[slug]/page.tsx`
 
-**Native Components** (React Native + NativeWind) - Future
+**Mobile Components** (React Native + NativeWind)
 
-- Location: `components/mobile/[slug]/`
+- Location: `packages/mobile/src/[slug]/`
 - Testing: Jest + Testing Library
 - Stories: Component Story Format (CSF)
-- Route: `/docs/native/[slug]`
+- Route: `/docs/components/mobile/[slug]`
+- Documentation: `apps/docs/app/docs/components/mobile/[slug]/page.tsx`
 
 ## Adding a new web component
 
-1. Create `components/web/[slug]/[slug].tsx` — the component
-2. Create `components/web/[slug]/[slug].stories.tsx` — named exports with `args`, no Storybook dependency
-3. Create `components/web/[slug]/[slug].test.tsx` — Vitest + Testing Library tests
-4. Create `app/docs/components/web/[slug]/page.tsx` — import `ComponentDoc` from `@/ui/templates/component-doc`
-5. Add entry to `app/docs/navigation.ts` in the "Web Components" section
+1. Create `packages/web/src/[slug]/[slug].tsx` — the component
+2. Create `packages/web/src/[slug]/[slug].stories.tsx` — named exports with `args`, no Storybook dependency
+3. Create `packages/web/src/[slug]/[slug].test.tsx` — Vitest + Testing Library tests
+4. Add export to `packages/web/package.json`: `"./[slug]": "./src/[slug]/[slug].tsx"`
+5. Run CLI sync: `pnpm run -w web:sync` (updates `packages/cli/web/`)
+6. Create `apps/docs/app/docs/components/web/[slug]/page.tsx` — import and render `ComponentDoc` template with `name`, `description`, `package: "web"`, `slug: "[slug]"`
+7. Add entry to `apps/docs/app/docs/navigation.ts` in the "Web Components" section
 
 ## Adding a new mobile component
 
-1. Create `components/mobile/[slug]/[slug].tsx` — the component
-2. Create `components/mobile/[slug]/[slug].stories.tsx` — named exports with `args`
-3. Create `components/mobile/[slug]/[slug].test.tsx` — Jest + Testing Library tests
-4. Create `app/docs/components/mobile/[slug]/page.tsx` — custom page layout for native components
-5. Add entry to `app/docs/navigation.ts` in the "Mobile Components" section
+1. Create `packages/mobile/src/[slug]/[slug].tsx` — the component
+2. Create `packages/mobile/src/[slug]/[slug].stories.tsx` — named exports with `args`
+3. Create `packages/mobile/src/[slug]/[slug].test.tsx` — Jest + Testing Library tests
+4. Add export to `packages/mobile/package.json`: `"./[slug]": "./src/[slug]/[slug].tsx"`
+5. Run CLI sync: `pnpm run -w mobile:sync` (updates `packages/cli/mobile/`)
+6. Create `apps/docs/app/docs/components/mobile/[slug]/page.tsx` — import and render `ComponentMobileDoc` template
+7. Add entry to `apps/docs/app/docs/navigation.ts` in the "Mobile Components" section
 
-The `ComponentDoc` template reads source files from disk at build time via `fs.readFileSync`. No manual code strings.
+**Template system:** Both `ComponentDoc` (web) and `ComponentMobileDoc` (mobile) use reusable sub-components:
+- `ComponentPageLayout` — shared header, TOC, footer
+- `PreviewSection` — 3-column preview grid
+- `CodeSection` — code tabs wrapper
+- `TestResults` — static test results with color coding (green: pass, red: fail)
+- `lib.ts` — shared utilities (`readComponentFile`, `readTestResult`, `TOC_SECTIONS`)
 
 ## Styling
 
@@ -99,11 +139,21 @@ The `ComponentDoc` template reads source files from disk at build time via `fs.r
 
 ## Testing
 
-- Framework: Vitest + `@testing-library/react` + jsdom
-- Run all tests: `npm test`
-- The `prebuild` script runs `vitest run --reporter=json --outputFile=test-results.json` before `next build`
-- Test results are embedded statically at build time. The `/api/run-tests` route returns 404 in production
-- In development, the test runner UI calls `/api/run-tests?slug=[slug]` to run per-component tests interactively
+- Framework: Vitest + `@testing-library/react` + jsdom for web components
+- Framework: Jest + `@testing-library/react-native` for mobile components
+- Run all tests: `pnpm test`
+- **Build-time test results**: The `prebuild` script runs tests and outputs JSON reports:
+  - `apps/docs/test-results-web.json` (Vitest output)
+  - `apps/docs/test-results-mobile.json` (Jest output)
+- **Static rendering**: Component docs render test results from JSON at build time (no dynamic test running)
+- **In production**: Test results are embedded in HTML, `/api/run-tests` returns 404
+- **In development**: Test results auto-update from JSON on page reload
+
+**Test result display**:
+- Green checkmark (✓) for passed tests
+- Red X (✗) for failed tests with error messages
+- Execution time in milliseconds
+- Pass/fail summary at bottom
 
 ## Code style
 
@@ -112,3 +162,14 @@ The `ComponentDoc` template reads source files from disk at build time via `fs.r
 - Do not add comments unless the logic is genuinely non-obvious
 - Prefer editing existing files over creating new ones
 - Keep atomic design boundaries — atoms must not import from molecules or above
+- Reusable template components live in `apps/docs/ui/templates/` (not atoms/molecules) since they're documentation-specific
+
+## Build & CLI
+
+- **Monorepo tool**: `pnpm` (not npm/yarn). Use `pnpm run -w` for workspace commands
+- **Build system**: Turbo with caching
+- **CLI sync scripts**: 
+  - `packages/cli/scripts/sync-web-components.mjs` reads from `packages/web/src/`
+  - `packages/cli/scripts/sync-mobile-components.mjs` reads from `packages/mobile/src/`
+  - These are run before CLI build to copy component files into the CLI package
+- **Turbopack note**: The build produces a non-fatal warning about dynamic fs operations in the docs. This is a known Turbopack limitation and does not affect functionality. The build completes successfully.

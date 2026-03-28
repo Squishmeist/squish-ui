@@ -18,6 +18,9 @@ export const navigation: NavSection[] = [
       { title: "Installation", href: "/docs/components/web/installation" },
       { title: "Button", href: "/docs/components/web/button" },
       { title: "Input", href: "/docs/components/web/input" },
+      { title: "Textarea", href: "/docs/components/web/textarea" },
+      { title: "Checkbox", href: "/docs/components/web/checkbox" },
+      { title: "Select", href: "/docs/components/web/select" },
     ],
   },
   {

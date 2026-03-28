@@ -6,7 +6,13 @@
     "./button": "./src/button/button.tsx",
     "./button/button.stories": "./src/button/button.stories.tsx",
     "./input": "./src/input/input.tsx",
-    "./input/input.stories": "./src/input/input.stories.tsx"
+    "./input/input.stories": "./src/input/input.stories.tsx",
+    "./textarea": "./src/textarea/textarea.tsx",
+    "./textarea/textarea.stories": "./src/textarea/textarea.stories.tsx",
+    "./checkbox": "./src/checkbox/checkbox.tsx",
+    "./checkbox/checkbox.stories": "./src/checkbox/checkbox.stories.tsx",
+    "./select": "./src/select/select.tsx",
+    "./select/select.stories": "./src/select/select.stories.tsx"
   },
   "scripts": {
     "test": "vitest run --config ./vitest.config.ts",
